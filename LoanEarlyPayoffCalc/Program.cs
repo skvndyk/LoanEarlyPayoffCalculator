@@ -14,7 +14,7 @@ namespace LoanEarlyPayoffCalc
             var name1 = Console.ReadLine();
 
             Console.WriteLine("Principal Remaining?");
-            var prRemain1 = decimal.Parse(Console.ReadLine());
+            var initprRemain1 = decimal.Parse(Console.ReadLine());
 
             Console.WriteLine("Interest Rate?");
             var interestRate1 = decimal.Parse(Console.ReadLine());
@@ -22,19 +22,19 @@ namespace LoanEarlyPayoffCalc
             Console.WriteLine("Monthly Payment?");
             var monthlyPayment1 = decimal.Parse(Console.ReadLine());
 
-            var loan1 = new Loan(name1, prRemain1, interestRate1, monthlyPayment1);
+            Console.WriteLine("Additional One-Time Payment?");
+            var oneTimePayment1 = decimal.Parse(Console.ReadLine());
+
+            var loan1 = new Loan(name1, initprRemain1, interestRate1, monthlyPayment1, oneTimePayment1);
 
             PrintAmoritizationSchedule(loan1);
         }
 
         public static void PrintAmoritizationSchedule(Loan loan)
         {
-            while (loan.PrincipalRemaining - loan.MonthlyPayment > 0)
-            {
-                var balanceAfterPayment = loan.CalculateBalanceAfterPayment();
-                Console.WriteLine($"{loan.CalcDT.ToString("MM/yy")}\t{balanceAfterPayment.ToString("C")}");
-                loan.PrincipalRemaining = balanceAfterPayment;
-            }
+            loan.AmoritizeThis();
+            Console.WriteLine($"Total Payments: {loan.PaymentsApplied}");
+            Console.WriteLine($"Total Interest Paid: {loan.TotalInterestPaid.ToString("C")}");
             Console.ReadLine();
         }
     }
