@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace LoanEarlyPayoffCalc
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("Loan 1 Name?");
             var name1 = Console.ReadLine();
@@ -23,11 +23,19 @@ namespace LoanEarlyPayoffCalc
             var monthlyPayment1 = decimal.Parse(Console.ReadLine());
 
             var loan1 = new Loan(name1, prRemain1, interestRate1, monthlyPayment1);
+
+            PrintAmoritizationSchedule(loan1);
         }
 
-        public decimal PrintAmoritizationSchedule(Loan loan)
+        public static void PrintAmoritizationSchedule(Loan loan)
         {
-            throw new NotImplementedException();
+            while (loan.PrincipalRemaining > 0)
+            {
+                var balanceAfterPayment = loan.CalculateBalanceAfterPayment();
+                Console.WriteLine(balanceAfterPayment.ToString());
+                loan.PrincipalRemaining = balanceAfterPayment;
+            }
+            Console.ReadLine();
         }
     }
 }
