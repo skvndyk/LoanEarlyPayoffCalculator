@@ -39,18 +39,43 @@ namespace LoanEarlyPayoffCalc
             var newBalance = PrincipalRemaining - (MonthlyPayment - interest);
             return newBalance;
         }
-        private decimal CalculateInterest() { return InterestMultiplier * PrincipalRemaining; }
+        private decimal CalculateInterest() => InterestMultiplier * PrincipalRemaining; 
 
         public void AmoritizeThis()
         {
+            SingleAmoritize();
+            if (OneTimePayment > 0)
+            {
+                var secondLoan = CopyLoan();
+                secondLoan.SingleAmoritize(true);
+                Console.WriteLine($"You saved {Difference(TotalInterestPaid, secondLoan.TotalInterestPaid).ToString("C")} " +
+                    $"and {Difference(PaymentsApplied, secondLoan.PaymentsApplied)} months of payments with your one-time payment!");
+            }
+        }
+
+        private void SingleAmoritize(bool applyOneTimePayment = false)
+        {
             PrincipalRemaining = InitialPrincipalRemaining;
+            if (applyOneTimePayment)
+            {
+                PrincipalRemaining -= OneTimePayment;
+            }
             while (PrincipalRemaining - MonthlyPayment > 0)
             {
                 var balanceAfterPayment = CalculateBalanceAfterPayment();
                 Console.WriteLine($"{CalcDT.ToString("MM/yy")}\t{balanceAfterPayment.ToString("C")}");
                 PrincipalRemaining = balanceAfterPayment;
             }
+            Console.WriteLine($"Total Payments: {PaymentsApplied}");
+            Console.WriteLine($"Total Interest Paid: {TotalInterestPaid.ToString("C")}");
+            Console.WriteLine();
         }
 
+        private Loan CopyLoan()
+        {
+            return new Loan(Name, InitialPrincipalRemaining, InterestRate, MonthlyPayment, OneTimePayment);
+        }
+
+        private decimal Difference(decimal val1, decimal val2) => Math.Abs(val2 - val1);
     }
 }
