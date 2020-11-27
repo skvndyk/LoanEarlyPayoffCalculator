@@ -29,10 +29,10 @@ namespace LoanEarlyPayoffCalc
 
         public static void PrintAmoritizationSchedule(Loan loan)
         {
-            while (loan.PrincipalRemaining > 0)
+            while (loan.PrincipalRemaining - loan.MonthlyPayment > 0)
             {
                 var balanceAfterPayment = loan.CalculateBalanceAfterPayment();
-                Console.WriteLine(balanceAfterPayment.ToString());
+                Console.WriteLine($"{loan.CalcDT.ToString("MM/yy")}\t{balanceAfterPayment.ToString("C")}");
                 loan.PrincipalRemaining = balanceAfterPayment;
             }
             Console.ReadLine();

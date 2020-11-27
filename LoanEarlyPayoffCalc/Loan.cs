@@ -16,15 +16,20 @@ namespace LoanEarlyPayoffCalc
             InterestRate = interestRate;
             MonthlyPayment = monthlyPayment;
         }
+
+        private int PaymentsApplied = 0;
         public string Name { get; set; }
         public decimal PrincipalRemaining { get; set; }
         //public decimal InitialPrincipal { get; set; }
         public decimal InterestRate { get; set; }
         public decimal MonthlyPayment { get; set; }
         private decimal InterestMultiplier => InterestRate / 12;
+        public DateTime CurrentDT => DateTime.Now;
+        public DateTime CalcDT => CurrentDT.AddMonths(PaymentsApplied);
         
         public decimal CalculateBalanceAfterPayment()
         {
+            PaymentsApplied++;
             var interest = CalculateInterest();
             var newBalance = PrincipalRemaining - (MonthlyPayment - interest);
             return newBalance;
