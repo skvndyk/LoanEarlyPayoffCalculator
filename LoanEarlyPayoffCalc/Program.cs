@@ -33,8 +33,6 @@ namespace LoanEarlyPayoffCalc
         public static void PrintAmoritizationSchedule(Loan loan)
         {
             loan.AmoritizeThis();
-            Console.WriteLine($"Total Payments: {loan.PaymentsApplied}");
-            Console.WriteLine($"Total Interest Paid: {loan.TotalInterestPaid.ToString("C")}");
             Console.ReadLine();
         }
     }
